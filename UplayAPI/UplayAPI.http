@@ -1,0 +1,6 @@
+@UplayAPI_HostAddress = http://localhost:7157
+
+GET {{UplayAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
