@@ -20,8 +20,11 @@ namespace UplayAPI
                 optionsBuilder.UseMySQL(connectionString);
             }
         }
-		public DbSet<Activity> Activities { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Activity> Activities { get; set; }
 		public DbSet<Vendor> Vendors { get; set; }
 		public DbSet<Booking> Bookings { get; set; }
+        public DbSet<Review> Reviews { get; set; }
+        public DbSet<Complaint> Complaints { get; set; }
     }
 }
