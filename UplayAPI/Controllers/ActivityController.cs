@@ -52,6 +52,56 @@ namespace UplayAPI.Controllers
 			});
 			return Ok(data);
 		}
+		[HttpGet("/sortedpriceascending")]
+		public IActionResult GetAllPriceAscendingSorted()
+		{
+			IQueryable<Activity> result = _context.Activities.Include(t => t.Vendor).Where(x => x.IsActive == true);
+			var list = result.OrderByAscending(x => x.Price).ToList();
+			var data = list.Select(t => new
+			{
+				t.Id,
+				t.Name,
+				t.Type,
+				t.Description,
+				t.ImageFile,
+				t.Location,
+				t.ActivityDate,
+				t.Price,
+				t.CreatedAt,
+				t.UpdatedAt,
+				t.VendorId,
+				Vendor = new
+				{
+					t.Vendor?.Name
+				}
+			});
+			return Ok(data);
+		}
+		[HttpGet("/sortedpricedescending")]
+		public IActionResult GetAllPriceDescendingSorted()
+		{
+			IQueryable<Activity> result = _context.Activities.Include(t => t.Vendor).Where(x => x.IsActive == true);
+			var list = result.OrderByDescending(x => x.Price).ToList();
+			var data = list.Select(t => new
+			{
+				t.Id,
+				t.Name,
+				t.Type,
+				t.Description,
+				t.ImageFile,
+				t.Location,
+				t.ActivityDate,
+				t.Price,
+				t.CreatedAt,
+				t.UpdatedAt,
+				t.VendorId,
+				Vendor = new
+				{
+					t.Vendor?.Name
+				}
+			});
+			return Ok(data);
+		}
 		[HttpGet("{id}")]
 		public IActionResult GetActivity(int id)
 		{
