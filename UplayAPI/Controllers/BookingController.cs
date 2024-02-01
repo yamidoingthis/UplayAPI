@@ -21,7 +21,7 @@ namespace UplayAPI.Controllers
             if (search != null)
             {
                 result = result.Where(x => x.Name.Contains(search)
-                || x.Date.Contains(search));
+                || x.Activity.Contains(search));
             }
             var list = result.OrderByDescending(x => x.CreatedAt).ToList();
             return Ok(list);
@@ -33,9 +33,9 @@ namespace UplayAPI.Controllers
             var myBooking = new Booking()
             {
                 Name = booking.Name.Trim(),
-                Date = booking.Date,
+				Activity = booking.Activity.Trim(),
+				Date = booking.Date,
                 Time = booking.Time,
-                Purchase_date = booking.Purchase_date,
                 Quantity = booking.Quantity,
                 CreatedAt = now,
                 UpdatedAt = now
@@ -63,9 +63,9 @@ namespace UplayAPI.Controllers
                 return NotFound();
             }
             myBooking.Name = booking.Name.Trim();
-            myBooking.Date = booking.Date;
+			myBooking.Activity = booking.Activity.Trim();
+			myBooking.Date = booking.Date;
             myBooking.Time = booking.Time;
-            myBooking.Purchase_date = booking.Purchase_date;
             myBooking.Quantity = booking.Quantity;
             myBooking.UpdatedAt = DateTime.Now;
             _context.SaveChanges();
