@@ -14,7 +14,18 @@ namespace UplayAPI.Models
         [MaxLength(50)]
         public string Email { get; set; } = string.Empty;
 
-        [MaxLength(100), JsonIgnore]
+        [MaxLength(8)]
+        public string Phone { get; set; } = string.Empty;
+
+        [MaxLength(4)]
+        public string NRIC { get; set; } = string.Empty;
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime? BirthDate { get; set; }
+
+
+        [MaxLength(100)]
         public string Password { get; set; } = string.Empty;
 
         [Column(TypeName = "datetime")]
@@ -22,9 +33,5 @@ namespace UplayAPI.Models
 
         [Column(TypeName = "datetime")]
         public DateTime UpdatedAt { get; set; }
-
-        // Navigation property to represent the one-to-many relationship
-        [JsonIgnore]
-        public List<Review>? Reviews { get; set; }
     }
 }
