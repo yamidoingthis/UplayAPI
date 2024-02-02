@@ -17,10 +17,11 @@ namespace UplayAPI.Controllers
             _context = context;
         }
 
-        [HttpPost, Authorize]
-        public IActionResult AddReview(Review review)
+        [HttpPost("{id}"), Authorize]
+        public IActionResult AddReview(Review review, int id)
         {
             int userId = GetUserId();
+            int activityId = id;
             var now = DateTime.Now;
             var myReview = new Review()
             {
@@ -30,7 +31,8 @@ namespace UplayAPI.Controllers
                 RevFlag = "Not Flagged",
                 CreatedAt = now,
                 UpdatedAt = now,
-                UserId = userId
+                UserId = userId,
+                ActivityId = activityId
             };
 
             _context.Reviews.Add(myReview);
@@ -60,6 +62,11 @@ namespace UplayAPI.Controllers
                 User = new
                 {
                     r.User?.Name
+                },
+                r.ActivityId,
+                Activity = new
+                {
+                    r.Activity?.Name
                 }
             });
             return Ok(data);
@@ -87,6 +94,11 @@ namespace UplayAPI.Controllers
                 User = new
                 {
                     review.User?.Name
+                },
+                review.ActivityId,
+                Activity = new 
+                { 
+                    review.Activity?.Name
                 }
             };
             return Ok(data);
