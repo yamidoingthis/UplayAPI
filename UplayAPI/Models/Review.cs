@@ -21,11 +21,11 @@ namespace UplayAPI.Models
 
         [Column(TypeName = "datetime")]
         public DateTime UpdatedAt { get; set; }
-
         // Foreign key property
         public int UserId { get; set; }
-
+        public int ActivityId { get; set; }
         // Navigation property to represent the one-to-many relationship
         public User? User { get; set; }
+        public Activity? Activity { get; set; }
     }
 }

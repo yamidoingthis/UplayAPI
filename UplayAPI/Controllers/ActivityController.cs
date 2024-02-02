@@ -58,7 +58,6 @@ namespace UplayAPI.Controllers
 			IQueryable<Activity> result = _context.Activities.Include(t => t.Vendor).Where(x => x.IsActive == true);
 			var list = result.OrderByDescending(x => x.Price).ToList();
 			list.Reverse();
-
 			var data = list.Select(t => new
 			{
 				t.Id,
