@@ -107,7 +107,12 @@ namespace UplayAPI.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Bookings");
                 });
@@ -291,6 +296,13 @@ namespace UplayAPI.Migrations
                     b.Navigation("Vendor");
                 });
 
+            modelBuilder.Entity("UplayAPI.Models.Booking", b =>
+                {
+                    b.HasOne("UplayAPI.Models.User", null)
+                        .WithMany("Bookings")
+                        .HasForeignKey("UserId");
+                });
+
             modelBuilder.Entity("UplayAPI.Models.Complaint", b =>
                 {
                     b.HasOne("UplayAPI.Models.User", "User")
@@ -311,7 +323,7 @@ namespace UplayAPI.Migrations
                         .IsRequired();
 
                     b.HasOne("UplayAPI.Models.User", "User")
-                        .WithMany()
+                        .WithMany("Reviews")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -319,6 +331,13 @@ namespace UplayAPI.Migrations
                     b.Navigation("Activity");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("UplayAPI.Models.User", b =>
+                {
+                    b.Navigation("Bookings");
+
+                    b.Navigation("Reviews");
                 });
 
             modelBuilder.Entity("UplayAPI.Models.Vendor", b =>
