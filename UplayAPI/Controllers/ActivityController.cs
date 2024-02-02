@@ -16,7 +16,7 @@ namespace UplayAPI.Controllers
 		{
 			_context = context;
 		}
-		private int GetVendorId()
+		private int GetUserId()
 		{
 			return Convert.ToInt32(User.Claims
 				.Where(c => c.Type == ClaimTypes.NameIdentifier)
@@ -25,7 +25,7 @@ namespace UplayAPI.Controllers
 		[HttpGet]
 		public IActionResult GetAll(string? search)
 		{
-			IQueryable<Activity> result = _context.Activities.Include(t => t.Vendor).Where(x => x.IsActive == true);
+			IQueryable<Activity> result = _context.Activities.Include(t => t.User).Where(x => x.IsActive == true);
 			if (search != null)
 			{
 				result = result.Where(x => x.Name.Contains(search)
@@ -44,18 +44,18 @@ namespace UplayAPI.Controllers
 				t.Price,
 				t.CreatedAt,
 				t.UpdatedAt,
-				t.VendorId,
-				Vendor = new
+				t.UserId,
+                User = new
 				{
-					t.Vendor?.Name
+					t.User?.Name
 				}
 			});
 			return Ok(data);
 		}
-		[HttpGet("/sortedpriceascending")]
+		[HttpGet("sortedpriceascending")]
 		public IActionResult GetAllPriceAscendingSorted()
 		{
-			IQueryable<Activity> result = _context.Activities.Include(t => t.Vendor).Where(x => x.IsActive == true);
+			IQueryable<Activity> result = _context.Activities.Include(t => t.User).Where(x => x.IsActive == true);
 			var list = result.OrderByDescending(x => x.Price).ToList();
 			list.Reverse();
 			var data = list.Select(t => new
@@ -70,18 +70,18 @@ namespace UplayAPI.Controllers
 				t.Price,
 				t.CreatedAt,
 				t.UpdatedAt,
-				t.VendorId,
-				Vendor = new
+				t.UserId,
+                User = new
 				{
-					t.Vendor?.Name
+					t.User?.Name
 				}
 			});
 			return Ok(data);
 		}
-		[HttpGet("/sortedpricedescending")]
+		[HttpGet("sortedpricedescending")]
 		public IActionResult GetAllPriceDescendingSorted()
 		{
-			IQueryable<Activity> result = _context.Activities.Include(t => t.Vendor).Where(x => x.IsActive == true);
+			IQueryable<Activity> result = _context.Activities.Include(t => t.User).Where(x => x.IsActive == true);
 			var list = result.OrderByDescending(x => x.Price).ToList();
 			var data = list.Select(t => new
 			{
@@ -95,10 +95,10 @@ namespace UplayAPI.Controllers
 				t.Price,
 				t.CreatedAt,
 				t.UpdatedAt,
-				t.VendorId,
-				Vendor = new
+				t.UserId,
+                User = new
 				{
-					t.Vendor?.Name
+					t.User?.Name
 				}
 			});
 			return Ok(data);
@@ -106,7 +106,7 @@ namespace UplayAPI.Controllers
 		[HttpGet("{id}")]
 		public IActionResult GetActivity(int id)
 		{
-			Activity? activity = _context.Activities.Include(t => t.Vendor)
+			Activity? activity = _context.Activities.Include(t => t.User)
 				.FirstOrDefault(t => t.Id == id);
 			if (activity == null || activity.IsActive == false)
 			{
@@ -124,10 +124,10 @@ namespace UplayAPI.Controllers
 				activity.Price,
 				activity.CreatedAt,
 				activity.UpdatedAt,
-				activity.VendorId,
-				Vendor = new
+				activity.UserId,
+                User = new
 				{
-					activity.Vendor?.Name
+					activity.User?.Name
 				}
 			};
 			return Ok(data);
@@ -135,7 +135,7 @@ namespace UplayAPI.Controllers
 		[HttpPost, Authorize]
 		public IActionResult AddActivity(Activity activity)
 		{
-			int vendorId = GetVendorId();
+			int userId = GetUserId();
 			var now = DateTime.Now;
 			var myActivity = new Activity()
 			{
@@ -149,8 +149,8 @@ namespace UplayAPI.Controllers
 				IsActive = true,
 				CreatedAt = now,
 				UpdatedAt = now,
-				VendorId = vendorId
-			};
+                UserId = userId
+            };
 			_context.Activities.Add(myActivity);
 			_context.SaveChanges();
 			return Ok(myActivity);
@@ -163,8 +163,8 @@ namespace UplayAPI.Controllers
 			{
 				return NotFound();
 			}
-			int vendorId = GetVendorId();
-			if (myActivity.VendorId != vendorId)
+			int userId = GetUserId();
+			if (myActivity.UserId != userId)
 			{
 				return Forbid();
 			}
@@ -180,8 +180,8 @@ namespace UplayAPI.Controllers
 			{
 				return NotFound();
 			}
-			int vendorId = GetVendorId();
-			if (myActivity.VendorId != vendorId)
+			int userId = GetUserId();
+			if (myActivity.UserId != userId)
 			{
 				return Forbid();
 			}
@@ -201,8 +201,8 @@ namespace UplayAPI.Controllers
 			{
 				return NotFound();
 			}
-			int vendorId = GetVendorId();
-			if (myActivity.VendorId != vendorId)
+			int userId = GetUserId();
+			if (myActivity.UserId != userId)
 			{
 				return Forbid();
 			}

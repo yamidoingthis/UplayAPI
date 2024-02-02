@@ -113,12 +113,6 @@ namespace UplayAPI.Controllers
                 return NotFound();
             }
 
-            // int userId = GetUserId();
-            // if (myReview.UserId != userId)
-            // {
-            //     return Forbid();
-            // }
-
             myReview.RevStar = review.RevStar;
             myReview.RevDesc = review.RevDesc.Trim();
             myReview.RevStatus = review.RevStatus;
@@ -159,7 +153,7 @@ namespace UplayAPI.Controllers
                 return Forbid();
             }
 
-            _context.Reviews.Remove(myReview);
+            myReview.RevStatus = "Deleted";
             _context.SaveChanges();
             return Ok();
         }

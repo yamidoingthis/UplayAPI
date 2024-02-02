@@ -38,7 +38,8 @@ namespace UplayAPI.Controllers
                 Time = booking.Time,
                 Quantity = booking.Quantity,
                 CreatedAt = now,
-                UpdatedAt = now
+                UpdatedAt = now,
+
             };
             _context.Bookings.Add(myBooking);
             _context.SaveChanges();
