@@ -33,5 +33,9 @@ namespace UplayAPI.Models
 
         [Column(TypeName = "datetime")]
         public DateTime UpdatedAt { get; set; }
+
+        [JsonIgnore]
+        public List<Review>? Reviews { get; set; }
+        public List<Booking>? Bookings { get; set; }
     }
 }

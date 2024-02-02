@@ -9,7 +9,7 @@ namespace UplayAPI.Models
         public string Name { get; set; } = string.Empty;
 
         [Required, EmailAddress, MaxLength(50)]
-        [RegularExpression(@"^(?=.*[a-zA-Z]).{8,}$", ErrorMessage = "At least 1 letter and 1 number")]
+        [RegularExpression(@"^(?=.*[a-zA-Z]).{8,}$", ErrorMessage = "At least 1 letter")]
         public string Email { get; set; } = string.Empty;
 
         [Required]
