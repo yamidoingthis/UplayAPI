@@ -44,6 +44,8 @@ namespace UplayAPI.Controllers
             _context.SaveChanges();
             return Ok(myBooking);
         }
+
+
         [HttpGet("{id}")]
         public IActionResult GetBooking(int id)
         {
