@@ -2,16 +2,8 @@
 
 namespace UplayAPI.Models
 {
-    public class RegisterRequest
+    public class UpdateUserRequest
     {
-        [Required, MinLength(3), MaxLength(50)]
-        [RegularExpression(@"^[a-zA-Z '-,.]+$", ErrorMessage = "Only allow letters, spaces and characters: ' - , .")]
-        public string Name { get; set; } = string.Empty;
-
-        [Required, EmailAddress, MaxLength(50)]
-        [RegularExpression(@"^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$", ErrorMessage = "At least 1 letter and 1 number")]
-        public string Email { get; set; } = string.Empty;
-
         [Required]
         [RegularExpression(@"^\d{8}$", ErrorMessage = "Phone number must 8 digits.")]
         public string Phone { get; set; }
@@ -23,18 +15,14 @@ namespace UplayAPI.Models
         public string NRIC
         {
             get { return _nric; }
-            set => _nric = value?.ToUpper();
+            set => _nric = value?.ToUpper();  // Convert to uppercase before storing
+
+
         }
 
         [Required(ErrorMessage = "Birth date is required")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? BirthDate { get; set; }
-
-
-
-        [Required, MinLength(8), MaxLength(50)]
-        public string Password { get; set; } = string.Empty;
-
     }
 }
