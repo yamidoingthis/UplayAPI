@@ -39,7 +39,8 @@ namespace UplayAPI.Controllers
                 Quantity = booking.Quantity,
                 CreatedAt = now,
                 UpdatedAt = now,
-
+                Status = "Unconfirmed",
+                Price = booking.Price,
             };
             _context.Bookings.Add(myBooking);
             _context.SaveChanges();
@@ -87,5 +88,17 @@ namespace UplayAPI.Controllers
             return Ok();
         }
 
-    }
+		[HttpPut("status/{id}")]
+		public IActionResult UpdateStatus(int id)
+		{
+			var myBooking = _context.Bookings.Find(id);
+			if (myBooking == null)
+			{
+				return NotFound();
+			}
+            myBooking.Status = "Confirmed";
+			_context.SaveChanges();
+			return Ok();
+		}
+	}
 }

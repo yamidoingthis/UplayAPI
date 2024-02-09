@@ -19,7 +19,8 @@ namespace UplayAPI.Models
         [Column(TypeName = "datetime")]
         public DateTime UpdatedAt { get; set; }
 
-       
+        public string Status {  get; set; } = string.Empty;
 
-    }
+		public float Price { get; set; }
+	}
 }
