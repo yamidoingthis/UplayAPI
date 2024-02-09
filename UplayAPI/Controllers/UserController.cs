@@ -165,6 +165,14 @@ namespace UplayAPI.Controllers
             return Ok(user);
         }
 
+        [HttpGet("all")]
+        public IActionResult GetAllUsers()
+        {
+            var users = _context.Users.ToList();
+            return Ok(users);
+        }
+
+
 
         [HttpPut("update/{id}"), Authorize]
         public IActionResult UpdateProfile(int id, UpdateUserRequest request)

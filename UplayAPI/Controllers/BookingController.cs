@@ -29,7 +29,7 @@ namespace UplayAPI.Controllers
         [HttpPost]
         public IActionResult AddBooking(Booking booking)
         {
-            var now = DateTime.Now;
+            var now = DateTime.Now; 
             var myBooking = new Booking()
             {
                 Name = booking.Name.Trim(),
