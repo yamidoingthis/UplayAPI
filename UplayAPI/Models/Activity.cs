@@ -29,8 +29,8 @@ namespace UplayAPI.Models
 		[Column(TypeName = "datetime")]
 		public DateTime UpdatedAt { get; set; }
 		// Foreign key property
-		public int VendorId { get; set; }
+		public int UserId { get; set; }
 		// Navigation property to represent the one-to-many relationship
-		public Vendor? Vendor { get; set; }
+		public User? User { get; set; }
 	}
 }

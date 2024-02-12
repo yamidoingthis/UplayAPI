@@ -113,32 +113,11 @@ namespace UplayAPI.Controllers
                 return NotFound();
             }
 
-            // int userId = GetUserId();
-            // if (myReview.UserId != userId)
-            // {
-            //     return Forbid();
-            // }
-
             myReview.RevStar = review.RevStar;
             myReview.RevDesc = review.RevDesc.Trim();
             myReview.RevStatus = review.RevStatus;
             myReview.RevFlag = review.RevFlag;
             myReview.UpdatedAt = DateTime.Now;
-
-            _context.SaveChanges();
-            return Ok();
-        }
-
-        [HttpPut("flag/{id}")]
-        public IActionResult FlagReview(int id, Review review)
-        {
-            var myReview = _context.Reviews.Find(id);
-            if (myReview == null)
-            {
-                return NotFound();
-            }
-
-            myReview.RevFlag = review.RevFlag;
 
             _context.SaveChanges();
             return Ok();
@@ -159,7 +138,50 @@ namespace UplayAPI.Controllers
                 return Forbid();
             }
 
-            _context.Reviews.Remove(myReview);
+            myReview.RevStatus = "Deleted";
+            _context.SaveChanges();
+            return Ok();
+        }
+
+        [HttpDelete("flag/{id}"), Authorize]
+        public IActionResult Flag(int id)
+        {
+            var myReview = _context.Reviews.Find(id);
+            if (myReview == null)
+            {
+                return NotFound();
+            }
+
+            myReview.RevFlag = "Flagged";
+            _context.SaveChanges();
+            return Ok();
+        }
+
+        [HttpPut("approve/{id}"), Authorize]
+        public IActionResult Approve(int id)
+        {
+            var myReview = _context.Reviews.Find(id);
+            if (myReview == null)
+            {
+                return NotFound();
+            }
+
+            myReview.RevFlag = "Not Flagged";
+            myReview.RevStatus = "Unedited";
+            _context.SaveChanges();
+            return Ok();
+        }
+
+        [HttpDelete("hide/{id}"), Authorize]
+        public IActionResult Hide(int id)
+        {
+            var myReview = _context.Reviews.Find(id);
+            if (myReview == null)
+            {
+                return NotFound();
+            }
+
+            myReview.RevStatus = "Hidden";
             _context.SaveChanges();
             return Ok();
         }

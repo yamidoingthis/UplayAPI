@@ -29,7 +29,7 @@ namespace UplayAPI.Controllers
         [HttpPost]
         public IActionResult AddBooking(Booking booking)
         {
-            var now = DateTime.Now;
+            var now = DateTime.Now; 
             var myBooking = new Booking()
             {
                 Name = booking.Name.Trim(),
@@ -38,7 +38,9 @@ namespace UplayAPI.Controllers
                 Time = booking.Time,
                 Quantity = booking.Quantity,
                 CreatedAt = now,
-                UpdatedAt = now
+                UpdatedAt = now,
+                Status = "Unconfirmed",
+                Price = booking.Price,
             };
             _context.Bookings.Add(myBooking);
             _context.SaveChanges();
@@ -86,5 +88,17 @@ namespace UplayAPI.Controllers
             return Ok();
         }
 
-    }
+		[HttpPut("status/{id}")]
+		public IActionResult UpdateStatus(int id)
+		{
+			var myBooking = _context.Bookings.Find(id);
+			if (myBooking == null)
+			{
+				return NotFound();
+			}
+            myBooking.Status = "Confirmed";
+			_context.SaveChanges();
+			return Ok();
+		}
+	}
 }
