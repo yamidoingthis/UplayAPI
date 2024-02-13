@@ -72,6 +72,35 @@ namespace UplayAPI.Controllers
             return Ok(data);
         }
 
+        [HttpGet("activity/{id}")]
+        public IActionResult GetById(int id)
+        {
+            IQueryable<Review> result = _context.Reviews.Include(r => r.User).Where(r => r.ActivityId == id);
+
+            var myList = result.OrderByDescending(y => y.CreatedAt).ToList();
+            var data = myList.Select(r => new
+            {
+                r.Id,
+                r.RevStar,
+                r.RevDesc,
+                r.RevStatus,
+                r.RevFlag,
+                r.CreatedAt,
+                r.UpdatedAt,
+                r.UserId,
+                User = new
+                {
+                    r.User?.Name
+                },
+                r.ActivityId,
+                Activity = new
+                {
+                    r.Activity?.Name
+                }
+            });
+            return Ok(data);
+        }
+
         [HttpGet("{id}")]
         public IActionResult GetReview(int id)
         {

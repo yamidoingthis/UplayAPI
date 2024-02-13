@@ -119,7 +119,12 @@ namespace UplayAPI.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Bookings");
                 });
@@ -307,6 +312,13 @@ namespace UplayAPI.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("UplayAPI.Models.Booking", b =>
+                {
+                    b.HasOne("UplayAPI.Models.User", null)
+                        .WithMany("Bookings")
+                        .HasForeignKey("UserId");
+                });
+
             modelBuilder.Entity("UplayAPI.Models.Complaint", b =>
                 {
                     b.HasOne("UplayAPI.Models.User", "User")
@@ -339,6 +351,8 @@ namespace UplayAPI.Migrations
 
             modelBuilder.Entity("UplayAPI.Models.User", b =>
                 {
+                    b.Navigation("Bookings");
+
                     b.Navigation("Reviews");
                 });
 

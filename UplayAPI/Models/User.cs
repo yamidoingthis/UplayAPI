@@ -36,6 +36,6 @@ namespace UplayAPI.Models
 
         [JsonIgnore]
         public List<Review>? Reviews { get; set; }
-        
+        public List<Booking>? Bookings { get; set; }
     }
 }
