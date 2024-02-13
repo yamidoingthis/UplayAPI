@@ -196,7 +196,6 @@ namespace UplayAPI.Controllers
             }
 
             myReview.RevFlag = "Not Flagged";
-            myReview.RevStatus = "Unedited";
             _context.SaveChanges();
             return Ok();
         }
