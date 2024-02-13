@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace UplayAPI.Models
@@ -17,6 +18,8 @@ namespace UplayAPI.Models
 		public string? ImageFile { get; set; }
 		[Required, MinLength(3), MaxLength(100)]
 		public string Location { get; set; } = string.Empty;
+		[Required, MinLength(3), MaxLength(100)]
+		public string Vendor { get; set; } = string.Empty;
 		[Required]
 		[Column(TypeName = "datetime")]
 		public DateTime ActivityDate { get; set; }
@@ -29,8 +32,10 @@ namespace UplayAPI.Models
 		[Column(TypeName = "datetime")]
 		public DateTime UpdatedAt { get; set; }
 		// Foreign key property
-		public int VendorId { get; set; }
+		public int UserId { get; set; }
 		// Navigation property to represent the one-to-many relationship
-		public Vendor? Vendor { get; set; }
+		public User? User { get; set; }
+		[JsonIgnore]
+		public List<Booking>? Bookings { get; set; }
 	}
 }

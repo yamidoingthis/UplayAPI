@@ -21,27 +21,42 @@ namespace UplayAPI.Controllers
             if (search != null)
             {
                 result = result.Where(x => x.Name.Contains(search)
-                || x.Activity.Contains(search));
+                || x.Activity.Name.Contains(search));
             }
             var list = result.OrderByDescending(x => x.CreatedAt).ToList();
             return Ok(list);
         }
         [HttpPost]
-        public IActionResult AddBooking(Booking booking)
+        public IActionResult AddBooking(Booking booking, int id)
         {
             var now = DateTime.Now;
             var myBooking = new Booking()
             {
                 Name = booking.Name.Trim(),
-				Activity = booking.Activity.Trim(),
 				Date = booking.Date,
                 Time = booking.Time,
                 Quantity = booking.Quantity,
                 CreatedAt = now,
-                UpdatedAt = now
+                UpdatedAt = now,
+                ActivityId = id
             };
             _context.Bookings.Add(myBooking);
-            _context.SaveChanges();
+			Models.Activity? activity = _context.Activities.FirstOrDefault(t => t.Id == id);
+            Preferences preference = _context.Preferences.FirstOrDefault(t => t.Name == activity.Type);
+            if (preference != null)
+            {
+                var newPreference = new Preferences()
+                {
+                    Name = activity.Type,
+                    Bookings = 1
+                };
+                _context.Preferences.Add(newPreference);
+            }
+            else
+            {
+                preference.Bookings += 1;
+            }
+			_context.SaveChanges();
             return Ok(myBooking);
         }
 
@@ -65,7 +80,6 @@ namespace UplayAPI.Controllers
                 return NotFound();
             }
             myBooking.Name = booking.Name.Trim();
-			myBooking.Activity = booking.Activity.Trim();
 			myBooking.Date = booking.Date;
             myBooking.Time = booking.Time;
             myBooking.Quantity = booking.Quantity;
@@ -81,7 +95,10 @@ namespace UplayAPI.Controllers
             {
                 return NotFound();
             }
-            _context.Bookings.Remove(myBooking);
+			Models.Activity? activity = myBooking.Activity;
+			Preferences preference = _context.Preferences.FirstOrDefault(t => t.Name == activity.Type);
+            preference.Bookings -= 1;
+			_context.Bookings.Remove(myBooking);
             _context.SaveChanges();
             return Ok();
         }

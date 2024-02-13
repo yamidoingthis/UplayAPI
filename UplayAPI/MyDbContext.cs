@@ -21,6 +21,7 @@ namespace UplayAPI
             }
         }
         public DbSet<User> Users { get; set; }
+        public DbSet<Preferences> Preferences { get; set; }
         public DbSet<Activity> Activities { get; set; }
 		public DbSet<Vendor> Vendors { get; set; }
 		public DbSet<Booking> Bookings { get; set; }
