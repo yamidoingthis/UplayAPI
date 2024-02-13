@@ -11,12 +11,8 @@ using UplayAPI;
 namespace UplayAPI.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-<<<<<<<< HEAD:UplayAPI/Migrations/20240202032245_intialcreate.Designer.cs
-    [Migration("20240202032245_intialcreate")]
-========
-    [Migration("20240209094305_intialcreate")]
->>>>>>>> b39966408091ba27e4880f894ce708d6f0237f94:UplayAPI/Migrations/20240209094305_intialcreate.Designer.cs
-    partial class intialcreate
+    [Migration("20240213044341_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -358,11 +354,8 @@ namespace UplayAPI.Migrations
 
             modelBuilder.Entity("UplayAPI.Models.User", b =>
                 {
-<<<<<<<< HEAD:UplayAPI/Migrations/20240202032245_intialcreate.Designer.cs
                     b.Navigation("Bookings");
 
-========
->>>>>>>> b39966408091ba27e4880f894ce708d6f0237f94:UplayAPI/Migrations/20240209094305_intialcreate.Designer.cs
                     b.Navigation("Reviews");
                 });
 
