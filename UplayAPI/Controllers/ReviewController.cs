@@ -72,35 +72,6 @@ namespace UplayAPI.Controllers
             return Ok(data);
         }
 
-        [HttpGet("activity/{id}")]
-        public IActionResult GetById(int id)
-        {
-            IQueryable<Review> result = _context.Reviews.Include(r => r.User).Where(r => r.ActivityId == id);
-
-            var myList = result.OrderByDescending(y => y.CreatedAt).ToList();
-            var data = myList.Select(r => new
-            {
-                r.Id,
-                r.RevStar,
-                r.RevDesc,
-                r.RevStatus,
-                r.RevFlag,
-                r.CreatedAt,
-                r.UpdatedAt,
-                r.UserId,
-                User = new
-                {
-                    r.User?.Name
-                },
-                r.ActivityId,
-                Activity = new
-                {
-                    r.Activity?.Name
-                }
-            });
-            return Ok(data);
-        }
-
         [HttpGet("{id}")]
         public IActionResult GetReview(int id)
         {
@@ -142,11 +113,32 @@ namespace UplayAPI.Controllers
                 return NotFound();
             }
 
+            // int userId = GetUserId();
+            // if (myReview.UserId != userId)
+            // {
+            //     return Forbid();
+            // }
+
             myReview.RevStar = review.RevStar;
             myReview.RevDesc = review.RevDesc.Trim();
             myReview.RevStatus = review.RevStatus;
             myReview.RevFlag = review.RevFlag;
             myReview.UpdatedAt = DateTime.Now;
+
+            _context.SaveChanges();
+            return Ok();
+        }
+
+        [HttpPut("flag/{id}")]
+        public IActionResult FlagReview(int id, Review review)
+        {
+            var myReview = _context.Reviews.Find(id);
+            if (myReview == null)
+            {
+                return NotFound();
+            }
+
+            myReview.RevFlag = review.RevFlag;
 
             _context.SaveChanges();
             return Ok();
@@ -167,50 +159,7 @@ namespace UplayAPI.Controllers
                 return Forbid();
             }
 
-            myReview.RevStatus = "Deleted";
-            myReview.UpdatedAt = DateTime.Now;
-            _context.SaveChanges();
-            return Ok();
-        }
-
-        [HttpDelete("flag/{id}"), Authorize]
-        public IActionResult Flag(int id)
-        {
-            var myReview = _context.Reviews.Find(id);
-            if (myReview == null)
-            {
-                return NotFound();
-            }
-
-            myReview.RevFlag = "Flagged";
-            _context.SaveChanges();
-            return Ok();
-        }
-
-        [HttpPut("approve/{id}"), Authorize]
-        public IActionResult Approve(int id)
-        {
-            var myReview = _context.Reviews.Find(id);
-            if (myReview == null)
-            {
-                return NotFound();
-            }
-
-            myReview.RevFlag = "Not Flagged";
-            _context.SaveChanges();
-            return Ok();
-        }
-
-        [HttpDelete("hide/{id}"), Authorize]
-        public IActionResult Hide(int id)
-        {
-            var myReview = _context.Reviews.Find(id);
-            if (myReview == null)
-            {
-                return NotFound();
-            }
-
-            myReview.RevStatus = "Hidden";
+            _context.Reviews.Remove(myReview);
             _context.SaveChanges();
             return Ok();
         }

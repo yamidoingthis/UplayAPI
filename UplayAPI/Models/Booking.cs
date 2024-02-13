@@ -17,12 +17,12 @@ namespace UplayAPI.Models
         [Column(TypeName = "datetime")]
         public DateTime UpdatedAt { get; set; }
 
-        public string Status {  get; set; } = string.Empty;
         // Foreign key property
         public int ActivityId { get; set; }
         public int UserId { get; set; }
 
         // Navigation property to represent the one-to-many relationship
+        public Activity? Activity { get; set; }
         public User? User { get; set; }
 
     }

@@ -26,7 +26,7 @@ namespace UplayAPI.Controllers
 		[HttpGet]
 		public IActionResult GetAll(string? search)
 		{
-			IQueryable<Activity> result = _context.Activities.Include(t => t.Vendor).Where(x => x.IsActive == true);
+			IQueryable<Models.Activity> result = _context.Activities.Where(x => x.IsActive == true);
 			if (search != null)
 			{
 				result = result.Where(x => x.Name.Contains(search)

@@ -165,64 +165,6 @@ namespace UplayAPI.Controllers
             return Ok(user);
         }
 
-        [HttpGet("all")]
-        public IActionResult GetAllUsers()
-        {
-            var users = _context.Users.ToList();
-            return Ok(users);
-        }
-
-        [HttpPost("confirm-password")]
-        [Authorize] // Make sure the user is authenticated
-        public IActionResult ConfirmPassword(ConfirmPasswordRequest request)
-        {
-            var userId = Convert.ToInt32(User.Claims
-                .Where(c => c.Type == ClaimTypes.NameIdentifier)
-                .Select(c => c.Value)
-                .SingleOrDefault());
-
-            var foundUser = _context.Users.Find(userId);
-
-            // Verify the provided password against the stored hashed password
-            bool verified = BCrypt.Net.BCrypt.Verify(request.Password, foundUser.Password);
-
-            if (verified)
-            {
-                // Password is correct, return success response
-                return Ok(new { message = "Password confirmed successfully." });
-            }
-            else
-            {
-                // Password is incorrect, return error response
-                return BadRequest(new { message = "Incorrect password." });
-            }
-        }
-
-        [HttpPost("change-password")]
-        [Authorize] // Make sure the user is authenticated
-        public IActionResult ChangePassword(ChangePasswordRequest request)
-        {
-            var userId = Convert.ToInt32(User.Claims
-                .Where(c => c.Type == ClaimTypes.NameIdentifier)
-                .Select(c => c.Value)
-                .SingleOrDefault());
-
-            var user = _context.Users.FirstOrDefault(u => u.Id == userId);
-            if (user == null)
-            {
-                return NotFound("User not found");
-            }
-
-            // Hash the new password
-            string newPasswordHash = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
-
-            // Update user's password
-            user.Password = newPasswordHash;
-            _context.SaveChanges();
-
-            return Ok("Password updated successfully");
-        }
-
 
         [HttpPut("update/{id}"), Authorize]
         public IActionResult UpdateProfile(int id, UpdateUserRequest request)
@@ -245,8 +187,6 @@ namespace UplayAPI.Controllers
             {
                 return NotFound();
             }
-
-
 
             existingUser.Phone = request.Phone;
             existingUser.NRIC = request.NRIC;
