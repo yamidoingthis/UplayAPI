@@ -168,6 +168,7 @@ namespace UplayAPI.Controllers
             }
 
             myReview.RevStatus = "Deleted";
+            myReview.UpdatedAt = DateTime.Now;
             _context.SaveChanges();
             return Ok();
         }
