@@ -11,8 +11,8 @@ using UplayAPI;
 namespace UplayAPI.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20240209094305_intialcreate")]
-    partial class intialcreate
+    [Migration("20240209173118_users")]
+    partial class users
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -7,7 +7,7 @@ using MySql.EntityFrameworkCore.Metadata;
 namespace UplayAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class intialcreate : Migration
+    public partial class users : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
