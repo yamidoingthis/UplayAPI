@@ -4,10 +4,9 @@ namespace UplayAPI.Models
 {
     public class UpdateUserRequest
     {
-        [Required]
+        
         [RegularExpression(@"^\d{8}$", ErrorMessage = "Phone number must 8 digits.")]
         public string Phone { get; set; }
-
 
         private string _nric;
 
@@ -15,12 +14,9 @@ namespace UplayAPI.Models
         public string NRIC
         {
             get { return _nric; }
-            set => _nric = value?.ToUpper();  // Convert to uppercase before storing
-
-
+            set => _nric = value?.ToUpper();  
         }
 
-        [Required(ErrorMessage = "Birth date is required")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? BirthDate { get; set; }

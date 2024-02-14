@@ -165,16 +165,80 @@ namespace UplayAPI.Controllers
             return Ok(user);
         }
 
-
-        [HttpPut("update/{id}"), Authorize]
-        public IActionResult UpdateProfile(int id, UpdateUserRequest request)
+        [HttpGet("all")]
+        public IActionResult GetAllUsers()
         {
+            var users = _context.Users.ToList();
+            return Ok(users);
+        }
 
+        [HttpPost("confirm-password")]
+        [Authorize] // Make sure the user is authenticated
+        public IActionResult ConfirmPassword(ConfirmPasswordRequest request)
+        {
             var userId = Convert.ToInt32(User.Claims
                 .Where(c => c.Type == ClaimTypes.NameIdentifier)
                 .Select(c => c.Value)
                 .SingleOrDefault());
 
+            var foundUser = _context.Users.Find(userId);
+
+            // Verify the provided password against the stored hashed password
+            bool verified = BCrypt.Net.BCrypt.Verify(request.Password, foundUser.Password);
+
+            if (verified)
+            {
+                // Password is correct, return success response
+                return Ok(new { message = "Password confirmed successfully." });
+            }
+            else
+            {
+                // Password is incorrect, return error response
+                return BadRequest(new { message = "Incorrect password." });
+            }
+        }
+
+        [HttpPost("change-password")]
+        [Authorize] // Make sure the user is authenticated
+        public IActionResult ChangePassword(ChangePasswordRequest request)
+        {
+            var userId = Convert.ToInt32(User.Claims
+                .Where(c => c.Type == ClaimTypes.NameIdentifier)
+                .Select(c => c.Value)
+                .SingleOrDefault());
+
+            var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+
+            // Verify if the new password is different from the current password
+            bool isDifferent = !BCrypt.Net.BCrypt.Verify(request.NewPassword, user.Password);
+            if (!isDifferent)
+            {
+                return BadRequest("New password must be different from the current password");
+            }
+
+            // Hash the new password
+            string newPasswordHash = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
+
+            // Update user's password
+            user.Password = newPasswordHash;
+            _context.SaveChanges();
+
+            return Ok("Password updated successfully");
+        }
+
+
+
+        [HttpPut("update/{id}"), Authorize]
+        public IActionResult UpdateProfile(int id, UpdateUserRequest request)
+        {
+            var userId = Convert.ToInt32(User.Claims
+                .Where(c => c.Type == ClaimTypes.NameIdentifier)
+                .Select(c => c.Value)
+                .SingleOrDefault());
 
             if (userId != id)
             {
@@ -188,13 +252,27 @@ namespace UplayAPI.Controllers
                 return NotFound();
             }
 
-            existingUser.Phone = request.Phone;
-            existingUser.NRIC = request.NRIC;
-            existingUser.BirthDate = request.BirthDate;
+            
+            if (!string.IsNullOrEmpty(request.Phone))
+            {
+                existingUser.Phone = request.Phone;
+            }
+
+            if (!string.IsNullOrEmpty(request.NRIC))
+            {
+                existingUser.NRIC = request.NRIC;
+            }
+
+            if (request.BirthDate.HasValue)
+            {
+                existingUser.BirthDate = request.BirthDate;
+            }
+
             _context.SaveChanges();
 
             return Ok();
         }
+
 
         [HttpDelete("delete/{id}"), Authorize]
         public IActionResult DeleteUser(int id)
